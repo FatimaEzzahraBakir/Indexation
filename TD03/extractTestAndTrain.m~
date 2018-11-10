@@ -1,0 +1,15 @@
+function [ TrainSaumon1,TestSaumon1,TrainBar1, TestBar1] = extractTestAndTrain(VTSaumon, VTBar, sizeTrain)
+
+sizeVTSaumon1=size(VTSaumon,1);
+sizeVTBar1=size(VTBar,1);
+
+TrainSaumonIndice1 = randperm(sizeVTSaumon1, sizeTrain);
+TrainBarIndice1 = randperm(sizeVTBar1,sizeTrain);
+
+TrainSaumon1 = VTSaumon(TrainSaumonIndice1);
+TrainBar1 = VTBar(TrainBarIndice1);
+
+TestBar= VTBar;
+TestSaumon = VTSaumon;
+    
+end

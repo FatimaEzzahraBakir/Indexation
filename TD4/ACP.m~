@@ -1,0 +1,60 @@
+load('VTSaumonBar2.mat')
+nbIter = 100;
+sizeTrain = 100;
+
+ErreurSaumon=ones(1,100);
+ErreurBar=zeros(1,100);
+
+sizeVTBar=size(VTBar,1);
+sizeVTSaumon=size(VTSaumon,1);
+
+
+%visualisation des echantillons 
+
+figure(1)
+hold on
+axis equal
+scatter(VTBar(:, 1),VTBar(:,2));
+scatter(VTSaumon(:, 1), VTSaumon(:,2),'r');
+hold off
+
+VBar=CalculACP(VTBar);
+VSaumon=CalculACP(VTSaumon);
+
+projBar=Projection(VBar,VTBar);
+projSaumon=Projection(VSaumon,VTSaumon);
+
+%visualisation des echantillons aprés la réduction
+figure(2)
+hold on
+axis equal
+scatter(projBar(:, 1),projBar(:,2));
+scatter(projSaumon(:, 1), projSaumon(:,2),'r');
+hold off
+
+for i=1:nbIter
+
+[ TrainSaumon,TestSaumon,TrainBar, TestBar] = extractTestAndTrain(VTSaumon, VTBar, sizeTrain);
+
+
+
+[modelBar]=TrainModel(TrainBar);
+[modelSaumon]=TrainModel(TrainSaumon);
+
+
+
+ResBar = Myclassify(TestBar,modelBar,modelSaumon);
+ResSaumon = Myclassify(TestSaumon,modelBar,modelSaumon);
+
+
+[SaumonError, BarError ] = ComputeError(ResSaumon, ResBar);
+
+
+ErreurSaumon(i)= SaumonError*100;
+ErreurBar(i)=BarError*100;
+
+
+end;
+
+
+
